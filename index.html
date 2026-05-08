@@ -7,6 +7,8 @@
   <title>Kaline Bianca — Psicóloga</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
     * {
       margin: 0;
@@ -95,6 +97,25 @@
 
     .nav-cta:hover {
       background: var(--blue-dark)
+    }
+
+    /* NAV HAMBURGER (Hidden on desktop) */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .menu-toggle .bar {
+      width: 25px;
+      height: 2px;
+      background-color: var(--text);
+      transition: all 0.3s ease-in-out;
+    }
+    
+    .mobile-only {
+      display: none;
     }
 
     /* HERO */
@@ -729,48 +750,40 @@
 
     /* DEPOIMENTOS */
     .depoimentos {
-      padding: 6rem 5rem
+      padding: 6rem 5rem;
+      overflow: hidden;
     }
 
-    .dep-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem
+    .dep-slider {
+      margin-top: 3rem;
+      padding-bottom: 3rem;
     }
 
-    .dep-card {
+    .dep-block {
       background: var(--beige);
       border-radius: 1rem;
-      padding: 1.75rem;
-      border: 1px solid var(--beige2)
+      border: 1px solid var(--beige2);
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
     }
 
-    .dep-stars {
-      color: var(--blue);
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-      letter-spacing: 0.1em
+    .dep-slide-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 0.5rem;
+      display: block;
     }
 
-    .dep-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-style: italic;
-      font-weight: 300;
-      color: var(--text);
-      line-height: 1.65;
-      margin-bottom: 1.25rem
+    .swiper-button-next, .swiper-button-prev {
+      color: var(--blue) !important;
     }
 
-    .dep-author {
-      font-size: 0.78rem;
-      color: var(--muted)
-    }
-
-    .dep-author strong {
-      color: var(--text);
-      font-weight: 500
+    .swiper-pagination-bullet-active {
+      background: var(--blue) !important;
     }
 
     /* CTA FINAL */
@@ -831,22 +844,94 @@
       color: var(--text)
     }
 
+    /* WHATSAPP FIXO */
+    .whatsapp-fixo {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background-color: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .whatsapp-fixo:hover {
+      transform: scale(1.1);
+      background-color: #1ebe57;
+    }
+    
+    .whatsapp-fixo svg {
+      width: 35px;
+      height: 35px;
+    }
+
+    /* SPOTIFY FOOTER */
+    .spotify-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.3s ease;
+    }
+
+    .spotify-link:hover {
+      color: #1DB954;
+    }
+
+    .spotify-link svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
     /* RESPONSIVIDADE */
     @media (max-width: 992px) {
       .hero-title { font-size: 3.5rem; }
       nav, .hero-text, .um-porcento, .abordagem, .section, .como, .servicos, .depoimentos, footer { padding-left: 2.5rem; padding-right: 2.5rem; }
+      .sobre-grid, .abordagem-grid { gap: 3rem; }
       .um-porcento-img-wrap img { width: 250px; height: 250px; }
       .um-porcento-img-wrap { right: 2.5rem; }
       .um-cards, .servicos-grid, .dep-grid { grid-template-columns: repeat(2, 1fr); }
-      .stats { flex-wrap: wrap; justify-content: center; gap: 3rem; }
-      .steps { flex-wrap: wrap; }
-      .step { flex: 1 1 40%; }
+      .stats { flex-wrap: wrap; justify-content: center; gap: 2rem; border-bottom: none; }
+      .stat { flex: 1 1 40%; border-right: none; border-bottom: 1px solid var(--beige2); padding: 2rem 1rem; }
+      .steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 3rem 1rem; }
+      .steps::before { display: none; }
+      .step { flex: 1 1 40%; margin-bottom: 0; }
     }
 
     @media (max-width: 768px) {
-      nav { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
-      .nav-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+      nav { flex-direction: row; justify-content: space-between; padding: 1.5rem; text-align: left; }
       
+      .menu-toggle { display: flex; z-index: 200; }
+      .menu-toggle.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .menu-toggle.active .bar:nth-child(2) { opacity: 0; }
+      .menu-toggle.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+      .nav-links { 
+        position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; 
+        background-color: var(--cream); flex-direction: column; justify-content: center; 
+        align-items: center; transition: right 0.3s ease-in-out; z-index: 150; gap: 2.5rem;
+      }
+      .nav-links.active { right: 0; }
+      .nav-links a { font-size: 1.2rem; }
+      
+      .desktop-only { display: none; }
+      .mobile-only { display: block; margin-top: 1rem; }
+      .nav-links a.nav-cta-mobile {
+        background: var(--blue); color: #fff; padding: 1rem 2.5rem;
+        border-radius: 2rem; text-decoration: none; font-size: 1rem;
+        font-weight: 500; display: inline-block;
+      }
+
       .hero { grid-template-columns: 1fr; min-height: auto; }
       .hero-text { padding: 3rem 1.5rem; text-align: center; }
       .hero-btns { justify-content: center; }
@@ -854,26 +939,37 @@
       .hero-title { font-size: 2.8rem; }
       .hero-hourglass { width: 100%; max-width: 350px; }
 
-      .stats { flex-direction: column; align-items: center; gap: 2rem; padding: 3rem 1.5rem; }
-      .stat { text-align: center; }
+      .stats { flex-direction: column; align-items: center; gap: 0; padding: 0; border-top: 1px solid var(--beige2); }
+      .stat { width: 100%; padding: 2.5rem 1.5rem; border-bottom: 1px solid var(--beige2); }
+      .stat:last-child { border-bottom: none; }
 
       .section, .como, .servicos, .depoimentos { padding: 4rem 1.5rem; }
-      .sobre-grid, .abordagem-grid { grid-template-columns: 1fr; gap: 3rem; }
       
-      .um-porcento { padding: 4rem 1.5rem 3rem; margin-top: 4rem; }
-      .um-porcento-img-wrap { position: relative; top: auto; right: auto; left: auto; transform: none; display: flex; justify-content: center; margin-bottom: -5rem; margin-top: 2rem; z-index: 10; }
-      .um-porcento-img-wrap img { width: 200px; height: 200px; }
+      .sobre-grid, .abordagem-grid { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+      .sobre-img-wrap { aspect-ratio: 1/1; }
+      .sobre-quote { border-left: none; padding-left: 0; font-size: 1.4rem; }
+      
+      .um-porcento { padding: 6rem 1.5rem 3rem; margin-top: 4rem; text-align: center; }
+      .um-porcento-img-wrap { position: absolute; top: 0; left: 50%; right: auto; transform: translate(-50%, -50%); display: block; margin: 0; z-index: 10; }
+      .um-porcento-img-wrap img { width: 180px; height: 180px; border-width: 4px; }
       .um-cards, .servicos-grid, .dep-grid { grid-template-columns: 1fr; }
+      .um-cards { gap: 1rem; }
+      .um-num { font-size: 5rem; display: inline-block; }
+      .um-porcento h2 { font-size: 2rem; }
+      .um-porcento p { margin: 0 auto; }
       
       .abordagem { padding: 6rem 1.5rem 4rem; }
-      .step { flex: 1 1 100%; align-items: center; text-align: center; }
-      .step-dot::after { display: none; }
+      .tag-list { justify-content: center; margin: 1.5rem 0 2rem; }
+      .abordagem-quote { font-size: 1.5rem; }
+      
+      .step { flex: 1 1 100%; align-items: center; text-align: center; margin-bottom: 0; }
       
       .section-title { font-size: 2.4rem; }
-      .um-num { font-size: 5rem; }
-      .um-porcento h2 { font-size: 2rem; }
       
-      footer { flex-direction: column; text-align: center; gap: 1rem; padding: 2rem 1.5rem; }
+      footer { flex-direction: column; text-align: center; gap: 1.5rem; padding: 2.5rem 1.5rem; }
+      .footer-info { flex-direction: column; gap: 0.75rem; }
+      .whatsapp-fixo { bottom: 1.5rem; right: 1.5rem; width: 50px; height: 50px; }
+      .whatsapp-fixo svg { width: 30px; height: 30px; }
     }
   </style>
 </head>
@@ -882,14 +978,20 @@
 
   <nav>
     <div class="logo">Kaline Bianca</div>
-    <ul class="nav-links">
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+    <ul class="nav-links" id="nav-links">
       <li><a href="#sobre">Sobre</a></li>
       <li><a href="#metodo">Método 1%</a></li>
       <li><a href="#abordagem">Abordagem</a></li>
       <li><a href="#servicos">Serviços</a></li>
       <li><a href="#contato">Contato</a></li>
+      <li class="mobile-only"><a href="#contato" class="nav-cta-mobile">Agendar conversa</a></li>
     </ul>
-    <a href="#contato" class="nav-cta">Agendar conversa</a>
+    <a href="#contato" class="nav-cta desktop-only">Agendar conversa</a>
   </nav>
 
   <!-- HERO -->
@@ -1107,22 +1209,25 @@
   <section class="depoimentos">
     <p class="section-eyebrow">Depoimentos</p>
     <h2 class="section-title serif">O que dizem quem já passou pelo processo.</h2>
-    <div class="dep-grid">
-      <div class="dep-card">
-        <div class="dep-stars">★ ★ ★ ★ ★</div>
-        <p class="dep-text">"A Kaline me ajudou a entender que minha ansiedade não era fraqueza. Hoje consigo lidar com situações que antes me paralisavam completamente."</p>
-        <p class="dep-author"><strong>Ana P.</strong> — 28 anos</p>
+    <!-- Swiper -->
+    <div class="swiper dep-slider">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9216.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9217.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9220.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9221.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9223.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9224.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9225.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9226.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9227.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
+        <div class="swiper-slide"><div class="dep-block"><img src="assets/IMG_9228.PNG" alt="Depoimento" class="dep-slide-img"></div></div>
       </div>
-      <div class="dep-card">
-        <div class="dep-stars">★ ★ ★ ★ ★</div>
-        <p class="dep-text">"O processo foi muito mais prático do que eu esperava. Aprendi estratégias reais que uso todo dia, não só fico 'desabafando'."</p>
-        <p class="dep-author"><strong>Lucas M.</strong> — 31 anos</p>
-      </div>
-      <div class="dep-card">
-        <div class="dep-stars">★ ★ ★ ★ ★</div>
-        <p class="dep-text">"Me cobrava muito e não conseguia desligar. Depois de alguns meses de terapia, minha relação comigo mesma mudou de um jeito que eu não imaginava."</p>
-        <p class="dep-author"><strong>Fernanda R.</strong> — 25 anos</p>
-      </div>
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
+      <!-- Add Navigation -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
     </div>
   </section>
 
@@ -1135,9 +1240,19 @@
 
   <footer>
     <div class="footer-logo serif">Kaline Bianca</div>
-    <p>Psicóloga • CRP 09/012612 • Atendimento online</p>
+    <div class="footer-info" style="display: flex; gap: 2rem; align-items: center; justify-content: center;">
+      <p>Psicóloga • CRP 09/012612 • Atendimento online</p>
+      <a href="#" class="spotify-link" target="_blank" aria-label="Ouvir playlist no Spotify">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.52 17.34c-.24.36-.66.48-1.02.24-2.82-1.74-6.36-2.1-10.56-1.14-.42.12-.84-.12-.96-.54-.12-.42.12-.84.54-.96 4.56-1.02 8.52-.6 11.64 1.32.42.18.6.66.36 1.08zm1.44-3.18c-.3.48-.84.6-1.32.3-3.24-1.98-8.16-2.58-11.94-1.44-.54.18-1.08-.12-1.26-.66-.18-.54.12-1.08.66-1.26 4.32-1.26 9.72-.6 13.5 1.68.48.3.66.9.36 1.38zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.3c-.66.18-1.38-.18-1.56-.84-.18-.66.18-1.38.84-1.56 4.32-1.32 11.4-.12 16.02 2.64.6.36.78 1.14.42 1.74-.36.6-1.14.78-1.74.42z"/></svg>
+        Playlist Terapêutica
+      </a>
+    </div>
     <p>© 2026 — todos os direitos reservados</p>
   </footer>
+
+  <a href="https://wa.me/550000000000" target="_blank" class="whatsapp-fixo" aria-label="Falar pelo WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/></svg>
+  </a>
 
   <script>
     (function () {
@@ -1176,6 +1291,57 @@
     })();
   </script>
 
+  <script>
+    // Menu mobile
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      const navLinks = document.getElementById('nav-links');
+      const navItems = document.querySelectorAll('.nav-links a');
+
+      if (mobileMenu && navLinks) {
+        mobileMenu.addEventListener('click', () => {
+          mobileMenu.classList.toggle('active');
+          navLinks.classList.toggle('active');
+        });
+
+        navItems.forEach(item => {
+          item.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            navLinks.classList.remove('active');
+          });
+        });
+      }
+    });
+  </script>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- Initialize Swiper -->
+  <script>
+    var swiper = new Swiper(".dep-slider", {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+      },
+    });
+  </script>
 </body>
 
 </html>
